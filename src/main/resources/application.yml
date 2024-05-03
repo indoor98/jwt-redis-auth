@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:jwtredis
+    username: sa
+    password:
+
+  jpa:  # https://joyerim.tistory.com/6#%E2%96%AA%C2%A0JPA-1
+    defer-datasource-initialization: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+      generate-ddl: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  jwt:
+    key: asd@asdklasdghj@wg@dhjgadhasgdd@wgSDAwSadsbdjhA@SDwdSADSAWwdwasDWDASdwdaSDWdasdwdas@DNwdASNdAdawdjkahsdjkhwuadhwkdh2djkhdajksd
+    live:
+      atk: 300000
+      rtk: 3000000
