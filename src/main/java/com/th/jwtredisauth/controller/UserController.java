@@ -1,10 +1,7 @@
 package com.th.jwtredisauth.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.th.jwtredisauth.domain.dto.SignInRequestDTO;
-import com.th.jwtredisauth.domain.dto.SignUpRequestDTO;
-import com.th.jwtredisauth.domain.dto.TokenResponseDTO;
-import com.th.jwtredisauth.domain.dto.UserResponseDTO;
+import com.th.jwtredisauth.domain.dto.*;
 import com.th.jwtredisauth.service.UserService;
 import com.th.jwtredisauth.util.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +34,11 @@ public class UserController {
     }
 
     @GetMapping("/test")
-    public String test() {
+    public String test(HttpServletRequest request) throws JsonProcessingException {
+        String rtk = request.getHeader("Authorization").substring(7);
+        Subject subject = jwtProvider.getSubject(rtk);
+        System.out.println(subject.getAuthorities());
+        System.out.println(subject.getEmail());
         return "Hello!";
     }
 

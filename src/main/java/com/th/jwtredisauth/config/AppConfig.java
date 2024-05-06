@@ -47,7 +47,7 @@ public class AppConfig {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                        config.setAllowedOrigins(Collections.singletonList("*"));
                         config.setAllowedMethods(Collections.singletonList("*"));
                         config.setAllowCredentials(true);
                         config.setAllowedHeaders(Collections.singletonList("*"));
@@ -66,9 +66,11 @@ public class AppConfig {
                 .authorizeHttpRequests((requests) -> {
                     requests
 //                            .requestMatchers("/user").authenticated()
-                            .requestMatchers("/user/signup", "/user/signin").permitAll()
+                            .requestMatchers("/user/signup", "/user/signin", "/h2-console/**").permitAll()
                             .anyRequest().authenticated();
                 });
+        // h2-콘솔 접속 에러
+        http.headers(options -> options.frameOptions( frame -> frame.disable()));
         http.formLogin( s -> s.disable() );
         return (SecurityFilterChain)http.build();
     }

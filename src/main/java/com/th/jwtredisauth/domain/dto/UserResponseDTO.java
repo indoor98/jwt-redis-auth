@@ -31,7 +31,8 @@ public class UserResponseDTO {
         );
     }
 
-    private static String populateAuthorities(Set<Authority> collection) {
+
+    public static String populateAuthorities(Set<Authority> collection) {
         Set<String> authoritiesSet = new HashSet<>();
         for (Authority authority : collection) {
             authoritiesSet.add(authority.getName());

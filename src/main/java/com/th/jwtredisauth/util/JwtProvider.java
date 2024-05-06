@@ -2,15 +2,18 @@ package com.th.jwtredisauth.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.th.jwtredisauth.domain.User;
 import com.th.jwtredisauth.domain.dto.Subject;
 import com.th.jwtredisauth.domain.dto.TokenResponseDTO;
 import com.th.jwtredisauth.domain.dto.UserResponseDTO;
 import com.th.jwtredisauth.redis.RedisDao;
+import com.th.jwtredisauth.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +29,7 @@ public class JwtProvider {
 
     private final ObjectMapper objectMapper;
     private final RedisDao redisDao;
+    private final UserRepository userRepository;
 
     @Value("${spring.jwt.key}")
     private String key;
@@ -38,17 +42,18 @@ public class JwtProvider {
 
 
     public TokenResponseDTO createTokensBySignIn(UserResponseDTO userResponseDTO) throws JsonProcessingException {
-
+        User user = userRepository.findByEmail(userResponseDTO.getEmail()).get();
         Subject atkSubject = Subject.atk(
                 userResponseDTO.getId(),
                 userResponseDTO.getEmail(),
-                userResponseDTO.getAuthorities());
+                UserResponseDTO.populateAuthorities(user.getAuthorities()));
 
         Subject rtkSubject = Subject.rtk(
                 userResponseDTO.getId(),
                 userResponseDTO.getEmail(),
-                userResponseDTO.getAuthorities());
+                UserResponseDTO.populateAuthorities(user.getAuthorities()));
 
+        System.out.println(rtkSubject.getAuthorities());
         String atk = createToken(atkSubject, atkLive);
         String rtk = createToken(rtkSubject, rtkLive);
 
