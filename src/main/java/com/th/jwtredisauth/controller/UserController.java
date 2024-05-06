@@ -7,6 +7,7 @@ import com.th.jwtredisauth.domain.dto.TokenResponseDTO;
 import com.th.jwtredisauth.domain.dto.UserResponseDTO;
 import com.th.jwtredisauth.service.UserService;
 import com.th.jwtredisauth.util.JwtProvider;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +39,12 @@ public class UserController {
     @GetMapping("/test")
     public String test() {
         return "Hello!";
+    }
+
+    @GetMapping("/renew")
+    public ResponseEntity<TokenResponseDTO> renew(HttpServletRequest request) throws JsonProcessingException {
+        String rtk = request.getHeader("Authorization").substring(7);
+        TokenResponseDTO response = jwtProvider.renewToken(rtk);
+        return new  ResponseEntity<TokenResponseDTO>(response, HttpStatus.OK);
     }
 }

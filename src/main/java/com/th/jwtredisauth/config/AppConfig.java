@@ -1,7 +1,9 @@
 package com.th.jwtredisauth.config;
 
 import com.th.jwtredisauth.config.filter.CsrfCookieFilter;
+import com.th.jwtredisauth.config.filter.CustomUsernamePasswordAuthenticationProvider;
 import com.th.jwtredisauth.config.filter.JWTTokenAuthenticationFilter;
+import com.th.jwtredisauth.repository.UserRepository;
 import com.th.jwtredisauth.util.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,8 @@ import java.util.Collections;
 public class AppConfig {
 
     private final JwtProvider jwtProvider;
+    private final UserRepository userRepository;
+
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -62,7 +66,7 @@ public class AppConfig {
                 .authorizeHttpRequests((requests) -> {
                     requests
 //                            .requestMatchers("/user").authenticated()
-                            .requestMatchers("/user/*").permitAll()
+                            .requestMatchers("/user/signup", "/user/signin").permitAll()
                             .anyRequest().authenticated();
                 });
         http.formLogin( s -> s.disable() );
@@ -74,4 +78,8 @@ public class AppConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public CustomUsernamePasswordAuthenticationProvider customAuthenticationProvider() {
+        return new CustomUsernamePasswordAuthenticationProvider(userRepository, passwordEncoder());
+    }
 }

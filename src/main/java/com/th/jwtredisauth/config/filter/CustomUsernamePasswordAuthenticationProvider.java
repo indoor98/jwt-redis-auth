@@ -20,8 +20,8 @@ import java.util.Set;
 
 /**
  * 원래 스프링 시큐리티를 사용하려면 UsernamePasswordAuthentication이 인증객체(User)를 인식하기 위해
- * UserDetails를 구현한 엔티티를 사용해야 합니다.
- * 하지만 우리는 UserDetails를 구현하지 않을 것이므로 해당 provider를 대체해야합니다.
+ * 폼로그인 형식을 사용할 경우에만 이 필털르 거치게 됩니다.
+ * 따라서 우리는 JWT사용중이므로 필요없습니다. 지워도 무관!!!
  */
 
 @RequiredArgsConstructor

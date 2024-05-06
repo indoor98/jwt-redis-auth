@@ -28,15 +28,14 @@ public class JWTTokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
-        String authorization = request.getHeader("Authorizaion"); // 요청 헤더 중 Authorizaion: Bearer '토큰'
+        String authorization = request.getHeader("Authorization"); // 요청 헤더 중 Authorizaion: Bearer '토큰'
 
         if(authorization!=null) {
             String atk = authorization.substring(7); // Bearer 이후
-
             try {
                 Subject subject = jwtProvider.getSubject(atk);
                 String requestURI = request.getRequestURI();
-                if (subject.getType().equals("RTK") && !requestURI.equals("/user/reissue")) {
+                if (subject.getType().equals("RTK") && !requestURI.equals("/user/renew")) {
                     throw new JwtException("토큰을 확인하세요");
                 }
 
